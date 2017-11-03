@@ -1,5 +1,5 @@
 language: node_js
-sudo: required
+sudo: false
 node_js: stable
 addons:
   firefox: latest
@@ -8,8 +8,18 @@ addons:
       - google-chrome
     packages:
       - google-chrome-beta
-before_script:
-  - npm install -g polymer-cli
-  - polymer install --variants
+install:
+  - npm install
+  - cd functions && npm install && cd ..
+  - patch -p0 < polymer-cli-issue-701.patch
+  - perl -pi -e 's/\/\/# sourceMappingURL.*//' components/firebase/firebase-auth.js
 script:
   - xvfb-run polymer test
+  - npm run build
+deploy:
+  provider: script
+  script:
+    - npm run deploy:travis
+  on:
+    branch: master
+    tags: true
