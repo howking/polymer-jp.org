@@ -15,7 +15,7 @@ install:
   - patch -p0 < polymer-cli-issue-701.patch
   - perl -pi -e 's/\/\/# sourceMappingURL.*//' components/firebase/firebase-auth.js
 script:
-  - xvfb-run polymer test
+# - xvfb-run polymer test
   - npm run build
 deploy:
   provider: script

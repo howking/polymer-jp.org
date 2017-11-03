@@ -19,9 +19,10 @@
     "polymerfire": "Scarygami/polymerfire#72a34a8a44",
     "iron-collapse": "PolymerElements/iron-collapse#^2.0.0",
     "page-title": "zacharytamas/page-title#^3.0.0",
-    "iron-form": "PolymerElements/iron-form#^2.0.1",
-    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^2.0.0",
-    "web-component-tester": "Polymer/web-component-tester#^6.0.0"
+    "iron-form": "PolymerElements/iron-form#^2.0.1"
+  },
+  "devDependencies": {
+    "web-component-tester": "^6.4.0"
   },
   "resolutions": {
     "polymerfire": "72a34a8a44"
