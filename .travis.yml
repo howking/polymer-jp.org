@@ -21,6 +21,7 @@ deploy:
   skip_cleanup: true
   provider: script
   script:
+    - firebase use --add plymer-jp-ffc4c
     - npm run deploy:travis
 #  on:
 #    branch: master
