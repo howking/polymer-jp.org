@@ -1,3 +1,8 @@
+[![Build Status](https://travis-ci.org/howking/polymer-jp.org.svg?branch=master)](https://travis-ci.org/howking/polymer-jp.org)
+![Polymer2.0](https://img.shields.io/badge/Polymer-2.0-blue.svg)
+[![Firebase](https://img.shields.io/badge/server-Firebase-orange.svg)](https://firebase.google.com/)
+
+
 ## Check requirements
 
 - Node LTS, Current  
