@@ -43,7 +43,7 @@
         test('has page', done=>{
           flush(_=>{
             expect(fi.page).to.equal('home');
-            expect(fi.shadowRoot.querySelector('page-title').baseTitle).to.equal('Polymer Japon');
+            expect(fi.shadowRoot.querySelector('page-title').baseTitle).to.equal('Polymer Japan');
             async.series([
               cb=>{
                 _setLocation('/about/');
