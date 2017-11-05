@@ -1,8 +1,6 @@
 const functions = require('firebase-functions');
 const admin = require('firebase-admin');
-// requireだとdeploy時にこける
-var fs = require('fs');
-var serviceAccount = JSON.parse(fs.readFileSync('./functions/polymer-japan-firebase-adminsdk-a8xev-5e8e96bd69.key.json'));
+const serviceAccount = require('./polymer-japan-firebase-adminsdk-a8xev-5e8e96bd69.key.json');
 admin.initializeApp({ credential: admin.credential.cert(serviceAccount) });
 const db = admin.firestore();
 const GoogleSpreadsheet = require('google-spreadsheet');
