@@ -17,9 +17,8 @@ install:
   perl -pi -e 's/\/\/# sourceMappingURL.*//' bower_components/firebase/firebase-auth.js
 script:
 - |
-  (sleep 120 ; kill -TERM $(ps aux | grep 'selenium' | awk '{print $2}')) &
-  xvfb-run npm test
-  npm run build
+  (sleep 120 ; kill -TERM $(ps aux | grep 'selenium' | awk '{print $2}') 2>/dev/null) &
+  xvfb-run npm test && npm run build
 # for pull request
 before_deploy:
   - openssl aes-256-cbc -K $encrypted_38080a8db27a_key -iv $encrypted_38080a8db27a_iv -in functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json.enc -out functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json -d
