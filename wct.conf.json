@@ -1,4 +1,5 @@
 {
-    verbose: true,
-    testTimeout: 1 * 60 * 1000
+  verbose: true,
+  quiet: false,
+  persistent: false
 }
