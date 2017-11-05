@@ -1,6 +1,5 @@
 language: node_js
-sudo: required
-dist: trusty
+sudo: false
 node_js:
   - 6.11.1
 addons:
@@ -18,6 +17,7 @@ install:
   perl -pi -e 's/\/\/# sourceMappingURL.*//' bower_components/firebase/firebase-auth.js
 script:
 - |
+  (sleep 120 ; kill -9 $(ps aux | grep 'selenium' | awk '{print $2}')) &
   xvfb-run npm test
   npm run build
 # for pull request
