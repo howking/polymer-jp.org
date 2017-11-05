@@ -12,17 +12,15 @@ node_js:
 install:
   - npm install
   - (cd functions && npm install)
-  - openssl aes-256-cbc -K $encrypted_38080a8db27a_key -iv $encrypted_38080a8db27a_iv -in functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json.enc -out functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json -d
   - patch -p0 < polymer-cli-issue-701.patch
   - perl -pi -e 's/\/\/# sourceMappingURL.*//' components/firebase/firebase-auth.js
+  - openssl aes-256-cbc -K $encrypted_38080a8db27a_key -iv $encrypted_38080a8db27a_iv -in functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json.enc -out functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json -d
 script:
 # - xvfb-run polymer test
   - npm run build
-before_deploy: if [ -f functions/polymer-jp-ffc4c-firebase-adminsdk-c6iat-8c41fe5327.key.json ]; then echo ok ; fi
 deploy:
   skip_cleanup: true
   provider: firebase
-  message: "deploy by travis"
   token:
     secure: "cXZYdjpR9Oz+WfbXNbRyoMVII+0gdUTDiF4v+EJWk5Kh7xVleSNbOJ0cc9Yk/Zqc0aitj6/gqe9bhsL0OxnTWVljGU0/anXQsr4j7Mwqh18bOu0X4VTL+TJ74H5rxCHSHrL8CuNnL6q+ByzLvId3NU0f5Mo02rzrNXczKsMK3lddxeO5zU5C+cTP2Hic8RK/hKS50E6gwWXEQNIBltvxBvRg7tNf9hVIWICNEEopEY3y1Mc2Xk7xxyF7dTFn8QjYWwu7n71EMYgJY0jVRgC5PgOUXiydbpnm0fJ+fg0qS0nr4Lobmrz+lY/lGGk4caFBxPiFq/Ze8PlW+ahsRFVfLYzmLYCHAG6V5zIjUAAdb/1zYjCAoZaBbo2KazNB9B93+kmYMDXuGk46dHhgG+CSvi3nmLnFsjpgYGINnQX4kIQ0In20nTv5p8mWohKUv0dAl0WPbUWxZqv64Q5oLQlML7lt1zFqbOAmZOB9ng3vWUIx5XIUZdLV1X9QmHl+ZOydIUamES++E8re2YMt513gZxnepLhMAL6XjoHLh4jMApxaPwdSXXCUTDrhhd+ALX8/qfX8qOzNSYgwfND3h4m2BCcsCgIZ+vwbOaDyQhqL3QMQZYOp7prrUIzVRb037Ig6s2fajmhAfnUK8/KsdT3h9mXn81CAtG3kjvaQlnwZ00Q="
 #  on:
