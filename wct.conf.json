@@ -1,5 +1,5 @@
 {
-  verbose: true,
-  quiet: false,
-  persistent: false
+  "verbose": true,
+  "quiet": false,
+  "persistent": false
 }
