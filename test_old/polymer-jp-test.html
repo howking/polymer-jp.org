@@ -1,0 +1,291 @@
+<link rel="import" href="../components/polymer/polymer-element.html">
+<link rel="import" href="../components/polymer/lib/elements/dom-if.html">
+<link rel="import" href="../components/polymer/lib/elements/dom-repeat.html">
+<link rel="import" href="../components/polymerfire/firebase-app.html">
+<link rel="import" href="../components/polymerfire/firebase-auth.html">
+<link rel="import" href="../components/polymerfire/firestore-element.html">
+
+<dom-module id="polymer-jp-test">
+  <template>
+
+    <firebase-app auth-domain="polymer-jp-ffc4c.firebaseapp.com"
+                  database-url="https://polymer-jp-ffc4c.firebaseio.com"
+                  api-key="AIzaSyDDrTUFZtmp5j_q9Tu1AjqhltiGclT5WMg"
+                  storage-bucket="polymer-jp-ffc4c.appspot.com"
+                  messaging-sender-id="246861538947"
+                  project-id="polymer-jp-ffc4c">
+    </firebase-app>
+    <firebase-auth signed-in="{{login}}" provider="google"></firebase-auth>
+    <h2>Polymer JP Test</h2>
+    login: [[login]]<br>
+
+
+    <!-- <ul>
+         <template is="dom-repeat" items="[[index]]">
+         <li>[[item.title]]</li>
+         <template is="dom-if" if="[[item._childs]]">
+         <ol>
+         <template is="dom-repeat" items="[[item._childs]]" as="child">
+         <li>[[child.title]]</li>
+         </template>
+         </ol>
+         </template>
+         </template>
+    </ul> -->
+
+    <template is="dom-repeat" items="[[index]]">
+      <li>[[item.title]]</li>
+      <template is="dom-if" if="[[item._childs]]">
+        <ol>
+          <template is="dom-repeat" items="[[item._childs]]" as="child">
+            <li>[[child.title]]</li>
+          </template>
+        </ol>
+      </template>
+    </template>
+
+  </template>
+
+  <script>
+    class PolymerJpTest extends Polymer.FirestoreElement(Polymer.Element) {
+      static get is() { return 'polymer-jp-test'; }
+      static get properties() {
+        return {
+          doc: {
+            type: Object,
+            doc: 'docs/{page}',
+          },
+          index: {
+            type: Array,
+            value: [],
+          },
+        }
+      }
+      connectedCallback() {
+        super.connectedCallback();
+
+
+        const index = {};
+        this.db.collection('docs').where('show','==',true).orderBy('order').get().then(s=>{
+          s.forEach(d=>{
+            const _childs=[];
+            d.ref.collection('_childs').where('show','==',true).orderBy('order').get().then(sc=>sc.forEach(dc=>{
+              const doc = dc.data();
+              _childs.push({id:dc.id, title:doc.title});
+            })).then(_=>{
+              const doc = d.data();
+              index[d.id]={id:d.id, order:doc.order, title:doc.title, _childs: doc.noExpand ? [] : _childs};
+            });
+          })
+        }).then(_=>{
+          // TODO: うまく保存されない
+          Polymer.Async.timeOut.run(_=>{
+            console.log('save',index);
+            this.db.collection('docs').doc('home').update({'_index': index});
+          }, 1000);
+        })
+
+
+        /*
+        const childs = {};
+        ['faq','news','community'].forEach(c=>{
+
+          const childs=[];
+          this.db.collection('docs').doc(c).collection('_childs').get().then(s=>{
+            s.forEach(d=>{
+              const doc = d.data();
+              if(doc.show){
+                doc.id=d.id;
+                childs.push(doc);
+              }
+            })
+          }).then(_=>{
+            childs[c]=childs;
+          });
+
+        });
+        */
+
+
+        /*
+        const childs = {};
+
+        const news_childs=[];
+        this.db.collection('docs').doc('news').collection('_childs').get().then(s=>{
+          s.forEach(d=>{
+            const doc = d.data();
+            if(doc.show){
+              doc.id=d.id;
+              news_childs.push(doc);
+            }
+          })
+        }).then(_=>{
+          childs['news']=news_childs;
+        });
+
+        const faq_childs=[];
+        this.db.collection('docs').doc('faq').collection('_childs').get().then(s=>{
+          s.forEach(d=>{
+            const doc = d.data();
+            if(doc.show){
+              doc.id=d.id;
+              faq_childs.push(doc);
+            }
+          })
+        }).then(_=>{
+          childs['faq']=faq_childs;
+        });
+
+        const community_childs=[];
+        this.db.collection('docs').doc('community').collection('_childs').get().then(s=>{
+          s.forEach(d=>{
+            const doc = d.data();
+            if(doc.show){
+              doc.id=d.id;
+              community_childs.push(doc);
+            }
+          })
+        }).then(_=>{
+          childs['community']=community_childs;
+        });
+
+        */
+
+        /*
+        const index = {};
+        this.db.collection('docs').get().then(s=>{
+          s.forEach(d=>{
+            const childs=[];
+            const doc = d.data();
+            if(doc.show){
+              doc.id=d.id;
+              console.log(doc.id);
+              if(childs[doc.id]){
+                doc._childs={
+                  id:d.id,
+                  title:d.title
+                };
+              }
+              index[doc.id]=doc;
+            }
+          })
+        }).then(_=>{
+          console.log('save',index);
+          this.db.collection('docs').doc('home').update({'_index': index});
+        });
+
+        */
+
+        /*
+        this.db.collection('docs').doc('home').get().then(doc=>{
+          if (doc.exists) {
+            const index = doc.data()._index;
+            for (const v in index){
+              this.push('index',index[v]);
+            }
+          }
+        });
+        */
+
+        /*
+        const index=[];
+        this.db.collection('docs').get().then(s=>{
+          s.forEach(d=>{
+            const doc = d.data();
+            if(doc.show){
+              doc.id=d.id;
+              console.log(doc.id);
+              index.push(doc);
+            }
+          })
+        }).then(_=>{
+          const _childs=[];
+          index.forEach(doc=>{
+           const _childs=[];
+           this.db.collection('docs').doc(doc.id).collection('_childs').get().then(s=>{
+              s.forEach(d=>{
+                const child = d.data();
+                if(child.show){
+                  child.id=d.id;
+                  console.log(child.id);
+                  _childs.push(child);
+                }
+              })
+            }).then(_=>{
+              doc._childs=_childs;
+              this.push('index',doc);
+            })
+          })
+        });
+        */
+
+/*
+            const _childs=[];
+              sc.forEach(dc=>{
+                console.log(dc.id);
+                const child = dc.data();
+                child.id=dc.id;
+                _childs.push(child);
+              })
+            }).then(_=>{
+              const doc = d.data();
+              doc.id=d.id;
+              doc._childs=_childs;
+              this.push('index',doc);
+            });
+  */
+
+
+
+        /*
+         *         this.db.collection('docs').doc('news').collection('_childs').get().then(s=>{
+         *           console.log(s);
+         *           s.forEach(d=>{
+         *             console.log(d.data());
+         *           });
+         *         });
+         *         */
+
+        /*
+        this.db.collection('docs').where('show','==',true).where('order','>',0).orderBy('order').get().then(s=>{
+          s.forEach(d=>{
+            const _childs=[];
+            d.ref.collection('_childs').where('show','==',true).where('order','>',0).orderBy('order').get().then(sc=>sc.forEach(dc=>{
+              const doc = dc.data();
+              doc.id=dc.id;
+              _childs.push(doc);
+            })).then(_=>{
+              const doc = d.data();
+              doc.id=d.id;
+              doc._childs=_childs;
+              this.push('index',doc);
+            });
+          })
+        })
+        */
+
+        /*
+        this.db.collection('docs').orderBy('order').get().then(s=>{
+          s.forEach(d=>{
+            const _childs=[];
+            d.ref.collection('_childs').get().then(sc=>sc.forEach(dc=>{
+              const doc = dc.data();
+              doc.id=dc.id;
+              _childs.push(doc);
+            })).then(_=>{
+              const doc = d.data();
+              if(! doc.hide){
+                doc.id=d.id;
+                doc._childs=_childs;
+                this.push('index',doc);
+              }
+            });
+          })
+        })
+        */
+      }
+    }
+    customElements.define(PolymerJpTest.is, PolymerJpTest);
+  </script>
+
+</dom-module>
